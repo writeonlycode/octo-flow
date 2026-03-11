@@ -16,7 +16,7 @@
 Ensure you have the Rust toolchain installed, then clone and build:
 
 ```bash
-git clone https://github.com/your-username/octo-flow
+git clone https://github.com/writeonlycode/octo-flow
 cd octo-flow
 cargo build --release
 
