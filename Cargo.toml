@@ -1,0 +1,12 @@
+[package]
+name = "octo-flow"
+version = "0.1.0"
+edition = "2024"
+authors = ["Iago Bozza <iago@iagobozza.com>"]
+description = "A high-performance CLI utility built in Rust for processing massive GitHub Archive (GHArchive) datasets. It transforms raw, newline-delimited JSON (NDJSON) event streams into clean, tab-separated reports with a constant memory footprint."
+
+[dependencies]
+anyhow = "1.0.102"
+clap = { version = "4.5.60", features = ["derive"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
