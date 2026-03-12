@@ -1,12 +1,13 @@
+use anyhow::{Context, Result};
 use clap::Parser;
-use octo_flow::{config::Config, run};
-use std::process::exit;
+use config::Config;
+use octo_flow::run;
 
-fn main() {
+pub mod config;
+
+fn main() -> Result<()> {
     let config = Config::parse();
-
-    if let Err(error) = run(config) {
-        eprintln!("Ops, something went wrong: {error}");
-        exit(1);
-    }
+    run(config.input, config.event)
+        .context("The octo-flow engine encountered a critical error during processing.")?;
+    Ok(())
 }

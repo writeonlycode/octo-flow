@@ -27,5 +27,5 @@ pub struct Repo<'a> {
 #[derive(Serialize, Deserialize)]
 pub struct Actor<'a> {
     #[serde(borrow)]
-    pub display_login: &'a str,
+    pub login: Option<&'a str>,
 }
