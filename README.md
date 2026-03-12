@@ -19,7 +19,6 @@ Ensure you have the Rust toolchain installed, then clone and build:
 git clone https://github.com/writeonlycode/octo-flow
 cd octo-flow
 cargo build --release
-
 ```
 
 The binary will be available at `./target/release/octo-flow`.
@@ -34,7 +33,6 @@ To extract all "Push" events from a downloaded GHArchive file:
 
 ```bash
 octo-flow --input 2026-03-11-15.json --event PushEvent
-
 ```
 
 ### High-Performance Pipeline
@@ -43,7 +41,6 @@ Since GHArchive files are provided as `.json.gz`, you can "flow" the data direct
 
 ```bash
 zcat 2026-03-11-15.json.gz | octo-flow --input - --event WatchEvent > stars.tsv
-
 ```
 
 ### CLI Options
@@ -53,6 +50,56 @@ zcat 2026-03-11-15.json.gz | octo-flow --input - --event WatchEvent > stars.tsv
 | `--input <FILE>` | Path to the NDJSON file. Use `-` for `stdin`. |
 | `--event <TYPE>` | (Optional) The GitHub event type to filter (e.g., `PushEvent`, `PullRequestEvent`). |
 
+---
+
+In a standard professional README, the Testing section should go right after Usage and before the technical Under the Hood section.
+
+This follows the logical flow:
+
+What is it? (Introduction/Features)
+
+How do I get it? (Installation)
+
+How do I use it? (Usage)
+
+Does it actually work? (Testing) — <-- Put it here
+
+How does it work? (Under the Hood/Architecture)
+
+Updated README Structure
+Here is exactly how the middle section of your README should look:
+
+Markdown
+
+... [Usage Section ends here] ...
+
+| Option | Description |
+| --- | --- |
+| `--input <FILE>` | Path to the NDJSON file. Use `-` for `stdin`. |
+| `--event <TYPE>` | (Optional) The GitHub event type to filter (e.g., `PushEvent`). |
+
+---
+
+## 🧪 Testing
+
+`octo-flow` is built with a "test-heavy" mindset to ensure data integrity during high-speed processing.
+
+### Integration (End-to-End) Tests
+
+The suite uses `assert_cmd` to verify the compiled binary against real-world scenarios, including:
+
+* CLI argument validation.
+* Filtering accuracy across multiple NDJSON lines.
+* Graceful failure handling for missing files.
+
+### Unit Tests
+
+Internal logic is verified using Rust's trait system, allowing us to mock input streams using `std::io::Cursor` for lightning-fast verification of the parsing engine.
+
+To run the test suite:
+```bash
+cargo test
+```
 ---
 
 ## 🔬 Under the Hood
