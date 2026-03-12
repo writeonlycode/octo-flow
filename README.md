@@ -54,6 +54,18 @@ zcat 2026-03-11-15.json.gz | octo-flow --input - --event WatchEvent > stars.tsv
 
 ---
 
+## 📊 Performance Comparison
+
+Processed a 9.5 MB NDJSON dataset (roughly 65,536 lines):
+
+| Tool          | Time (s)     | Notes                                                     |
+|---------------|--------------|-----------------------------------------------------------|
+| `jq`          | 0m0.400s     | High flexibility, but high CPU and slow                   |
+| **octo-flow** | **0m0.053s** | **Fast and validated, but not the fastest**               |
+| `grep`        | 0m0.001s     | Fastest but skips validation and may give false positives |
+
+> **Why octo-flow?** While `grep` is slightly faster, it cannot handle complex JSON structures or nested logic. `octo-flow` provides the speed of C/Rust with the safety of a full JSON parser.
+
 ## 🧪 Testing
 
 `octo-flow` is built with a "test-heavy" mindset to ensure data integrity during high-speed processing.
