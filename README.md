@@ -42,17 +42,19 @@ The tool never loads the dataset into memory.
 Instead it uses a **streaming architecture**:
 
 ```
+
 input stream
-   ↓
+↓
 BufReader
-   ↓
+↓
 line iterator
-   ↓
+↓
 serde_json parser
-   ↓
+↓
 event filter
-   ↓
+↓
 TSV output
+
 ```
 
 This makes `octo-flow` suitable for:
@@ -75,25 +77,31 @@ This makes `octo-flow` suitable for:
 Example:
 
 ```
+
 zcat 2026-03-11-15.json.gz | octo-flow --input - --event WatchEvent
+
 ```
 
 ---
 
 # Example
 
-Filter GitHub **Push events** from a GHArchive dataset:
+Filter GitHub **Watch events** from a GHArchive dataset:
 
 ```
+
 octo-flow --input 2015-01-01-15.json --event WatchEvent
+
 ```
 
 Example output:
 
 ```
+
 2489651057	2015-01-01T15:00:03Z	SametSisartenep	visionmedia/debug	WatchEvent
 2489651078	2015-01-01T15:00:05Z	comcxx11	phpsysinfo/phpsysinfo	WatchEvent
 2489651080	2015-01-01T15:00:05Z	Soufien	wasabeef/awesome-android-libraries	WatchEvent
+
 ```
 
 ---
@@ -105,10 +113,13 @@ GHArchive publishes hourly GitHub event streams as compressed NDJSON files.
 `octo-flow` integrates naturally with shell pipelines:
 
 ```
-curl https://data.gharchive.org/2026-03-11-15.json.gz \
- | zcat \
- | octo-flow --input - --event WatchEvent \
- > stars.tsv
+
+curl [https://data.gharchive.org/2026-03-11-15.json.gz](https://data.gharchive.org/2026-03-11-15.json.gz) 
+| zcat 
+| octo-flow --input - --event WatchEvent \
+
+> stars.tsv
+
 ```
 
 ---
@@ -126,6 +137,28 @@ Example event types:
 * `PullRequestEvent`
 * `WatchEvent`
 * `ForkEvent`
+
+---
+
+# Documentation
+
+The project includes full Rust API documentation.
+
+Generate the documentation locally with:
+
+```
+
+cargo doc --open
+
+```
+
+This will build and open the documentation site for the `octo-flow` library, including the event model, streaming pipeline, and error handling.
+
+Key components documented in the crate:
+
+* `process_events` — core streaming event pipeline
+* `GitHubEvent` — GitHub event data model
+* `OctoFlowError` — structured error handling
 
 ---
 
@@ -158,7 +191,9 @@ Integration tests use `assert_cmd` to validate the compiled binary against reali
 Run tests:
 
 ```
+
 cargo test
+
 ```
 
 ---
@@ -168,15 +203,19 @@ cargo test
 Clone and build with Cargo:
 
 ```
-git clone https://github.com/writeonlycode/octo-flow
+
+git clone [https://github.com/writeonlycode/octo-flow](https://github.com/writeonlycode/octo-flow)
 cd octo-flow
 cargo build --release
+
 ```
 
 Binary location:
 
 ```
+
 target/release/octo-flow
+
 ```
 
 ---
@@ -209,4 +248,3 @@ This project demonstrates:
 # License
 
 MIT / Apache 2.0
-
