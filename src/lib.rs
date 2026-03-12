@@ -56,7 +56,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_valid_event_parsing() {
+    fn test_valid_event_parsing_works() {
         let data = r#"{"id":"123","type":"PushEvent","actor":{"login":"coder"},"repo":{"name":"rust-lang/rust"},"created_at":"2026-03-12"}"#;
         let reader = data.as_bytes();
 
@@ -64,6 +64,17 @@ mod tests {
 
         assert!(result.is_ok());
         assert_eq!(result.unwrap(), 1);
+    }
+
+    #[test]
+    fn test_invalid_event_parsing_fails() {
+        let data = r#"{"id":"123","type":"PushEvent","actor":{"login":"coder"},"repo":{"name":"rust-lang/rust"}"created_at":"2026-03-12"}"#;
+        let reader = data.as_bytes();
+
+        let result = process_events(reader, None);
+
+        assert!(result.is_err());
+        assert!(matches!(result, Err(OctoFlowError::ParseError(_))))
     }
 
     #[test]

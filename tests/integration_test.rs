@@ -42,7 +42,7 @@ fn test_cli_fails_on_missing_file() -> Result<(), Box<dyn std::error::Error>> {
 
     // Verify it fails with our custom error message
     cmd.assert().failure().stderr(predicate::str::contains(
-        "No such file or directory (os error 2)",
+        "The octo-flow engine encountered a critical error during processing.",
     ));
 
     Ok(())
