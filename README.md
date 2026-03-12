@@ -1,104 +1,212 @@
-## `octo-flow` 🐙💨
+# octo-flow
 
-![CI Status](https://github.com/writeonlycode/octo-flow/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/writeonlycode/octo-flow/actions/workflows/ci.yml/badge.svg)
+![Rust](https://img.shields.io/badge/rust-stable-orange)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![CLI](https://img.shields.io/badge/type-CLI-blue)
 
-**octo-flow** is a high-performance CLI utility built in Rust for processing massive GitHub Archive (GHArchive) datasets. It transforms raw, newline-delimited JSON (NDJSON) event streams into clean, tab-separated reports with a constant memory footprint.
+High-performance Rust CLI for streaming and filtering GitHub event data.
 
-## 🚀 Key Features
+`octo-flow` processes massive **GitHub Archive (GHArchive)** datasets and transforms newline-delimited JSON (NDJSON) event streams into clean tabular reports — using **constant memory and zero-copy deserialization**.
 
-* **Zero-Copy Deserialization:** Leverages Rust lifetimes to point directly into the read buffer, avoiding thousands of unnecessary string allocations.
-* **Constant Memory Footprint:** Streams data line-by-line using `BufRead`, allowing you to process multi-gigabyte files using only a few megabytes of RAM.
-* **Flexible I/O:** Supports reading from local files or piping directly from `stdin` (perfect for `zcat` or `curl` pipelines).
-* **Idiomatic Filtering:** High-speed event filtering built on top of Serde's powerful derive macros.
+The tool is designed for **data pipelines, log processing, and analytics workflows** where large JSON streams must be processed efficiently.
 
 ---
 
-## 🛠️ Installation
+# Features
 
-Ensure you have the Rust toolchain installed, then clone and build:
+### Streaming JSON Processing
 
-```bash
+Processes NDJSON **line-by-line** using buffered I/O.
+
+This allows multi-gigabyte datasets to be processed while using only a few megabytes of memory.
+
+---
+
+### Zero-Copy Deserialization
+
+Event fields are deserialized using `&str` references instead of allocating new `String`s.
+
+Benefits:
+
+* fewer heap allocations
+* better cache locality
+* faster processing
+
+---
+
+### Constant Memory Footprint
+
+The tool never loads the dataset into memory.
+
+Instead it uses a **streaming architecture**:
+
+```
+input stream
+   ↓
+BufReader
+   ↓
+line iterator
+   ↓
+serde_json parser
+   ↓
+event filter
+   ↓
+TSV output
+```
+
+This makes `octo-flow` suitable for:
+
+* large analytics datasets
+* CI/CD logs
+* observability pipelines
+* ETL preprocessing
+
+---
+
+### Flexible Input Sources
+
+`octo-flow` can read from:
+
+* local files
+* standard input (stdin)
+* decompression pipelines
+
+Example:
+
+```
+zcat 2026-03-11-15.json.gz | octo-flow --input - --event WatchEvent
+```
+
+---
+
+# Example
+
+Filter GitHub **Push events** from a GHArchive dataset:
+
+```
+octo-flow --input 2015-01-01-15.json --event WatchEvent
+```
+
+Example output:
+
+```
+2489651057	2015-01-01T15:00:03Z	SametSisartenep	visionmedia/debug	WatchEvent
+2489651078	2015-01-01T15:00:05Z	comcxx11	phpsysinfo/phpsysinfo	WatchEvent
+2489651080	2015-01-01T15:00:05Z	Soufien	wasabeef/awesome-android-libraries	WatchEvent
+```
+
+---
+
+# Real-World Pipeline
+
+GHArchive publishes hourly GitHub event streams as compressed NDJSON files.
+
+`octo-flow` integrates naturally with shell pipelines:
+
+```
+curl https://data.gharchive.org/2026-03-11-15.json.gz \
+ | zcat \
+ | octo-flow --input - --event WatchEvent \
+ > stars.tsv
+```
+
+---
+
+# CLI Options
+
+| Option           | Description                         |
+| ---------------- | ----------------------------------- |
+| `--input <FILE>` | Path to NDJSON file (`-` for stdin) |
+| `--event <TYPE>` | Optional GitHub event filter        |
+
+Example event types:
+
+* `PushEvent`
+* `PullRequestEvent`
+* `WatchEvent`
+* `ForkEvent`
+
+---
+
+# Performance
+
+Benchmark on a 9.5MB NDJSON dataset (~65k events):
+
+| Tool      | Time   |
+| --------- | ------ |
+| jq        | 0.40s  |
+| octo-flow | 0.053s |
+| grep      | 0.001s |
+
+`grep` is faster but performs **no JSON parsing**, which can produce false positives.
+
+`octo-flow` provides **structured parsing with near-native speed**.
+
+---
+
+# Testing
+
+The project includes both **unit tests and end-to-end CLI tests**.
+
+Integration tests use `assert_cmd` to validate the compiled binary against realistic scenarios:
+
+* CLI argument validation
+* event filtering correctness
+* file handling errors
+
+Run tests:
+
+```
+cargo test
+```
+
+---
+
+# Installation
+
+Clone and build with Cargo:
+
+```
 git clone https://github.com/writeonlycode/octo-flow
 cd octo-flow
 cargo build --release
 ```
 
-The binary will be available at `./target/release/octo-flow`.
+Binary location:
 
----
-
-## 📖 Usage
-
-### Basic Filtering
-
-To extract all "Push" events from a downloaded GHArchive file:
-
-```bash
-octo-flow --input 2026-03-11-15.json --event PushEvent
+```
+target/release/octo-flow
 ```
 
-### High-Performance Pipeline
+---
 
-Since GHArchive files are provided as `.json.gz`, you can "flow" the data directly through `octo-flow` without decompressing it to disk first:
+# Why Rust?
 
-```bash
-zcat 2026-03-11-15.json.gz | octo-flow --input - --event WatchEvent > stars.tsv
-```
+Rust enables this tool to combine:
 
-### CLI Options
+* **C-like performance**
+* **memory safety**
+* **zero-cost abstractions**
+* **predictable resource usage**
 
-| Option | Description |
-| --- | --- |
-| `--input <FILE>` | Path to the NDJSON file. Use `-` for `stdin`. |
-| `--event <TYPE>` | (Optional) The GitHub event type to filter (e.g., `PushEvent`, `PullRequestEvent`). |
+These properties make Rust ideal for **high-throughput data processing tools** like `octo-flow`.
 
 ---
 
-## 📊 Performance Comparison
+# Project Goals
 
-Processed a 9.5 MB NDJSON dataset (roughly 65,536 lines):
+This project demonstrates:
 
-| Tool            | Time (s)     | Notes                                                     |
-|-----------------|--------------|-----------------------------------------------------------|
-| `jq`            | 0m0.400s     | High flexibility, but high CPU and slow                   |
-| **`octo-flow`** | **0m0.053s** | **Fast and validated, but not the fastest**               |
-| `grep`          | 0m0.001s     | Fastest but skips validation and may give false positives |
-
-**Why octo-flow?** While `grep` is slightly faster, it cannot handle complex JSON structures or nested logic. `octo-flow` provides the speed of C/Rust with the safety of a full JSON parser.
-
-## 🧪 Testing
-
-`octo-flow` is built with a "test-heavy" mindset to ensure data integrity during high-speed processing.
-
-### Integration (End-to-End) Tests
-
-The suite uses `assert_cmd` to verify the compiled binary against real-world scenarios, including:
-
-* CLI argument validation.
-* Filtering accuracy across multiple NDJSON lines.
-* Graceful failure handling for missing files.
-
-### Unit Tests
-
-Internal logic is verified using Rust's trait system, allowing us to mock input streams using `std::io::Cursor` for lightning-fast verification of the parsing engine.
-
-To run the test suite:
-```bash
-cargo test
-```
----
-
-## 🔬 Under the Hood
-
-### The "Flow" Architecture
-
-`octo-flow` uses a specialized memory management strategy. Instead of loading a JSON array into a `Vec`, it treats the input as a continuous stream of discrete JSON objects.
-
-By using `&'a str` instead of `String` in our internal data structures, we map JSON keys directly to slices of the line buffer. This reduces the pressure on the heap and maximizes CPU cache efficiency.
+* streaming data pipelines in Rust
+* zero-copy deserialization
+* CLI design
+* integration testing
+* GitHub Actions CI
 
 ---
 
-## 📜 License
+# License
 
 MIT / Apache 2.0
 
