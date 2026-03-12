@@ -74,7 +74,7 @@ This makes `octo-flow` suitable for:
 
 Example:
 
-```
+```bash
 zcat 2026-03-11-15.json.gz | octo-flow --input - --event WatchEvent
 ```
 
@@ -84,13 +84,13 @@ zcat 2026-03-11-15.json.gz | octo-flow --input - --event WatchEvent
 
 Filter GitHub **Watch events** from a GHArchive dataset:
 
-```
+```bash
 octo-flow --input 2015-01-01-15.json --event WatchEvent
 ```
 
 Example output:
 
-```
+```bash
 2489651057	2015-01-01T15:00:03Z	SametSisartenep	visionmedia/debug	WatchEvent
 2489651078	2015-01-01T15:00:05Z	comcxx11	phpsysinfo/phpsysinfo	WatchEvent
 2489651080	2015-01-01T15:00:05Z	Soufien	wasabeef/awesome-android-libraries	WatchEvent
@@ -104,7 +104,7 @@ GHArchive publishes hourly GitHub event streams as compressed NDJSON files.
 
 `octo-flow` integrates naturally with shell pipelines:
 
-```
+```bash
 curl [https://data.gharchive.org/2026-03-11-15.json.gz](https://data.gharchive.org/2026-03-11-15.json.gz) 
 | zcat 
 | octo-flow --input - --event WatchEvent > stars.tsv
@@ -176,7 +176,7 @@ Integration tests use `assert_cmd` to validate the compiled binary against reali
 
 Run tests:
 
-```
+```bash
 cargo test
 ```
 
@@ -186,7 +186,7 @@ cargo test
 
 Clone and build with Cargo:
 
-```
+```bash
 git clone [https://github.com/writeonlycode/octo-flow](https://github.com/writeonlycode/octo-flow)
 cd octo-flow
 cargo build --release
@@ -194,7 +194,7 @@ cargo build --release
 
 Binary location:
 
-```
+```bash
 target/release/octo-flow
 ```
 
