@@ -34,7 +34,7 @@ pub fn process_events<R: Read>(source: R, event: Option<String>) -> Result<usize
         let line = line_result?;
         let github_event: GitHubEvent = serde_json::from_str(&line)?;
 
-        if event.as_deref().map_or(true, |f| f == github_event.kind) {
+        if event.as_deref().is_none_or(|f| f == github_event.kind) {
             println!(
                 "{}\t{}\t{}\t{}\t{}",
                 github_event.id,
