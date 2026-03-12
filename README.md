@@ -1,6 +1,6 @@
 ## `octo-flow` 🐙💨
 
-![CI Status](https://github.com/writeonlycode/octo-flow/actions/workflows/ci.yml/badge.svg) `octo-flow` 🐙💨
+![CI Status](https://github.com/writeonlycode/octo-flow/actions/workflows/ci.yml/badge.svg)
 
 **octo-flow** is a high-performance CLI utility built in Rust for processing massive GitHub Archive (GHArchive) datasets. It transforms raw, newline-delimited JSON (NDJSON) event streams into clean, tab-separated reports with a constant memory footprint.
 
