@@ -2,8 +2,22 @@
 name = "octo-flow"
 version = "0.1.0"
 edition = "2024"
+
 authors = ["Iago Bozza <iago@iagobozza.com>"]
-description = "A high-performance CLI utility built in Rust for processing massive GitHub Archive (GHArchive) datasets. It transforms raw, newline-delimited JSON (NDJSON) event streams into clean, tab-separated reports with a constant memory footprint."
+description = "High-performance Rust CLI for streaming and filtering GitHub event data from GHArchive."
+readme = "README.md"
+
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/writeonlycode/octo-flow"
+homepage = "https://github.com/writeonlycode/octo-flow"
+documentation = "https://docs.rs/octo-flow"
+
+include = [
+    "src/**",
+    "Cargo.toml",
+    "README.md",
+    "LICENSE.md"
+]
 
 [dependencies]
 anyhow = "1.0.102"
