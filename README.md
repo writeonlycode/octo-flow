@@ -4,6 +4,7 @@
 ![Rust](https://img.shields.io/badge/rust-stable-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![CLI](https://img.shields.io/badge/type-CLI-blue)
+![Crates.io](https://img.shields.io/crates/v/octo-flow.svg)
 
 High-performance Rust CLI for streaming and filtering GitHub event data.
 
@@ -220,18 +221,6 @@ Rust enables this tool to combine:
 * **predictable resource usage**
 
 These properties make Rust ideal for **high-throughput data processing tools** like `octo-flow`.
-
----
-
-# Project Goals
-
-This project demonstrates:
-
-* streaming data pipelines in Rust
-* zero-copy deserialization
-* CLI design
-* integration testing
-* GitHub Actions CI
 
 ---
 
