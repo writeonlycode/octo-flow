@@ -12,6 +12,13 @@ repository = "https://github.com/writeonlycode/octo-flow"
 homepage = "https://github.com/writeonlycode/octo-flow"
 documentation = "https://docs.rs/octo-flow"
 
+keywords = ["cli", "github", "json", "streaming"]
+categories = ["command-line-utilities"]
+
+[[bin]]
+name = "octo-flow"
+path = "src/main.rs"
+
 include = [
     "src/**",
     "Cargo.toml",

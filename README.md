@@ -134,7 +134,7 @@ The project includes full Rust API documentation.
 
 Generate the documentation locally with:
 
-```
+```bash
 cargo doc --open
 ```
 
@@ -184,6 +184,8 @@ cargo test
 
 # Installation
 
+## Build from Source
+
 Clone and build with Cargo:
 
 ```bash
@@ -196,6 +198,14 @@ Binary location:
 
 ```bash
 target/release/octo-flow
+```
+
+## Install via Cargo
+
+If you have Rust installed, you can install `octo-flow` directly from crates.io:
+
+```bash
+cargo install octo-flow
 ```
 
 ---
