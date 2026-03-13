@@ -106,7 +106,7 @@ GHArchive publishes hourly GitHub event streams as compressed NDJSON files.
 `octo-flow` integrates naturally with shell pipelines:
 
 ```bash
-curl [https://data.gharchive.org/2026-03-11-15.json.gz](https://data.gharchive.org/2026-03-11-15.json.gz) 
+curl https://data.gharchive.org/2026-03-11-15.json.gz 
 | zcat 
 | octo-flow --input - --event WatchEvent > stars.tsv
 ```
@@ -190,7 +190,7 @@ cargo test
 Clone and build with Cargo:
 
 ```bash
-git clone [https://github.com/writeonlycode/octo-flow](https://github.com/writeonlycode/octo-flow)
+git clone https://github.com/writeonlycode/octo-flow
 cd octo-flow
 cargo build --release
 ```
