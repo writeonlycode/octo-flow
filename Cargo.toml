@@ -1,6 +1,6 @@
 [package]
 name = "octo-flow"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 
 authors = ["Iago Bozza <iago@iagobozza.com>"]
@@ -23,7 +23,8 @@ include = [
     "src/**",
     "Cargo.toml",
     "README.md",
-    "LICENSE.md"
+    "LICENSE-MIT.md",
+    "LICENSE-APACHE.md"
 ]
 
 [dependencies]
